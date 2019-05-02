@@ -19,7 +19,7 @@
         </td>
         <!--to date-->
         <td v-if="toDate != null">
-          {{ parseInt(toDate[f]) + parseInt(actual[f]) }}
+          {{ getToDate()[f] }}
         </td>
         <td v-if="toDate == null">
           {{ actual[f] }}
@@ -48,14 +48,32 @@
       }
     },
     methods: {
+      getToDate() {
+        let toDate = {'planning': 0, 'design': 0, 'code': 0, compile: 0, test: 0};
+        if (this.toDate != null) {
+          this.toDate.forEach(d => {
+            Object.keys(this.actual).forEach(fila => {
+              toDate[fila] += parseInt(d[fila]);
+            });
+          });
+          // Object.keys(this.actual).forEach(fila => {
+          //     toDate[fila] += toDate[fila] + parseInt(this.actual[fila]);
+          // });
+          console.log(toDate);
+          return toDate;
+        } else {
+          return undefined;
+        }
+      },
       total: function () {
         this.suma = {actual: 0, toDate: 0};
         Object.keys(this.actual).forEach(fila => {
           this.suma.actual += parseInt(this.actual[fila]);
         });
         if (this.toDate != null) {
-          Object.keys(this.toDate).forEach(fila => {
-            this.suma.toDate += parseInt(this.toDate[fila]) + parseInt(this.actual[fila]);
+          let toDate = this.getToDate()
+          Object.keys(toDate).forEach(fila => {
+            this.suma.toDate += parseInt(toDate[fila]);
           });
         } else {
           this.suma.toDate = this.suma.actual;

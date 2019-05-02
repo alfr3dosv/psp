@@ -26,14 +26,14 @@
       </TimeTable>
       <br>
       <Summary titulo="Summary time 2" :data="trabajo2.summary"
-               :to-date="trabajo1.time"
+               :to-date="[trabajo1.time]"
                :actual="trabajo2.time"
                :suma="trabajo2.suma.summary">
       </Summary>
       <br>
       <DefectsTable titulo="Defects injected 2" :actual="trabajo2.defectos"
                     :suma="trabajo2.suma.defectos"
-                    :to-date="trabajo1.defectos"
+                    :to-date="[trabajo1.defectos]"
       >
       </DefectsTable>
     </div>
@@ -43,14 +43,14 @@
       </TimeTable>
       <br>
       <Summary titulo="Summary time 3" :data="trabajo3.summary"
-               :to-date="sumarTime(trabajo1.time, trabajo2.time"
+               :to-date="[trabajo1.time, trabajo2.time]"
                :actual="trabajo3.time"
                :suma="trabajo3.suma.summary">
       </Summary>
       <br>
       <DefectsTable titulo="Defects injected 3" :actual="trabajo3.defectos"
                     :suma="trabajo3.suma.defectos"
-                    :to-date="trabajo3.defectos"
+                    :to-date="[trabajo1.defectos, trabajo2.defectos]"
       >
       </DefectsTable>
     </div>
@@ -110,13 +110,15 @@
         })
       },
       sumarTime(d1, d2) {
-        suma = {minutos: {}};
+        let suma = {minutos: {}};
         Object.keys(d1).forEach(k => {
-          for (i = 0; i < arguments.length; i++) {
-            suma.minutos[k]
-            suma.minutos[k] += d1.minutos[k] + d2.minutos[k];
+          for (let i = 0; i < arguments.length; i++) {
+            if (suma.minutos[k] == null)
+              suma.minutos[k] = 0;
+            suma.minutos[k] += parseInt(arguments[i].minutos[k]);
           }
         })
+        return suma;
       }
     },
     created() {
